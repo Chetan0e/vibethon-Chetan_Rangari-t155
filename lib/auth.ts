@@ -3,6 +3,8 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { auth } from "./firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -23,6 +25,26 @@ export const register = async (email: string, password: string) => {
     level: "Seed",
     createdAt: new Date(),
   });
+  
+  return userCredential;
+};
+
+export const signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  const userCredential = await signInWithPopup(auth, provider);
+  const user = userCredential.user;
+  
+  // Check if user exists in Firestore, if not initialize
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  if (!userDoc.exists()) {
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      xp: 0,
+      progress: 0,
+      level: "Seed",
+      createdAt: new Date(),
+    });
+  }
   
   return userCredential;
 };

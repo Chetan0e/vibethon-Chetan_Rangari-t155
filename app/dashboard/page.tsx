@@ -13,13 +13,14 @@ import { useRouter } from "next/navigation";
 export default function Dashboard() {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const load = async () => {
-      const user = auth.currentUser;
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setAuthChecked(true);
       if (!user) {
-        router.push("/login");
+        router.push("/");
         return;
       }
 
@@ -33,11 +34,12 @@ export default function Dashboard() {
       } finally {
         setLoading(false);
       }
-    };
-    load();
+    });
+
+    return () => unsubscribe();
   }, [router]);
 
-  if (loading) {
+  if (!authChecked || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-pulse text-xl gradient-text">Loading...</div>
