@@ -185,48 +185,5 @@ Modify the CSS variables in `app/globals.css` to customize the theme:
 
 The animated logo is defined in `components/AnimatedLogo.tsx`. Modify the petal colors and animation timing to match your branding.
 
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Add environment variables in Vercel dashboard
-4. Deploy
-
-### Other Platforms
-
-The app can be deployed to any platform that supports Next.js:
-- Netlify
-- Railway
-- Render
-- AWS Amplify
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
-## 🙏 Acknowledgments
-
-- Next.js team for the amazing framework
-- Firebase for the backend services
-- Three.js community for the 3D graphics
-- All contributors who helped improve this project
-
-## 📧 Support
-
-For support, email support@bloom-ai.com or open an issue on GitHub.
-
----
 
 Made with ❤️ by the Bloom team
