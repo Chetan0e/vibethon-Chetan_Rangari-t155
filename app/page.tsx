@@ -111,261 +111,256 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-white via-purple-50 to-indigo-50">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[8%] top-24 h-56 w-56 animate-pulse rounded-full bg-purple-200/30 blur-3xl" />
-        <div className="absolute right-[10%] top-36 h-72 w-72 animate-pulse rounded-full bg-blue-200/30 blur-3xl [animation-delay:400ms]" />
-        <div className="absolute bottom-0 left-1/3 h-64 w-64 animate-pulse rounded-full bg-pink-200/20 blur-3xl [animation-delay:800ms]" />
+    <div className="relative min-h-screen bg-[#fafafa] font-sans selection:bg-purple-200">
+      {/* Ambient Background */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-200/50 blur-[120px]" />
+        <div className="absolute top-[20%] right-[-5%] w-[30%] h-[50%] rounded-full bg-blue-200/40 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] rounded-full bg-indigo-200/40 blur-[120px]" />
       </div>
 
-      <nav className="sticky top-0 z-50 border-b border-purple-100/80 bg-white/75 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between transition-all duration-300">
-            <div className="group flex cursor-pointer items-center gap-3">
-              <div className="rounded-xl bg-white p-1 shadow-sm ring-1 ring-purple-100 transition duration-300 group-hover:scale-105 group-hover:shadow-md">
-                <AnimatedLogo size={38} />
-              </div>
-              <span className="bg-gradient-to-r from-gray-900 to-purple-700 bg-clip-text text-2xl font-extrabold tracking-tight text-transparent transition-transform duration-300 group-hover:scale-105">
-                Bloom
-              </span>
-            </div>
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 border-b border-gray-200/50 bg-white/70 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2.5 cursor-pointer">
+            <AnimatedLogo size={32} />
+            <span className="font-bold text-xl tracking-tight text-gray-900">Bloom</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => { document.getElementById('login-section')?.scrollIntoView({ behavior: 'smooth' }); setIsLogin(true); }}
+              className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition"
+            >
+              Log in
+            </button>
+            <button
+              onClick={() => { document.getElementById('login-section')?.scrollIntoView({ behavior: 'smooth' }); setIsLogin(false); }}
+              className="hidden md:block h-9 px-4 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition"
+            >
+              Sign up
+            </button>
           </div>
         </div>
       </nav>
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
-        <div className="grid min-h-[calc(100vh-8rem)] grid-cols-1 items-start gap-10 xl:grid-cols-[1.1fr,0.9fr]">
-          <section
-            className={`transition-all duration-700 ease-out ${
-              isVisible ? "translate-x-0 opacity-100" : "-translate-x-10 opacity-0"
-            }`}
-          >
-            <span className="inline-flex items-center gap-2 rounded-full border border-purple-200 bg-white/80 px-4 py-1 text-sm font-medium text-purple-700 shadow-sm">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-purple-500" />
-              AI Learning Platform
-            </span>
-
-            <h1 className="mt-5 text-4xl font-bold leading-tight text-gray-900 sm:text-5xl xl:text-6xl">
-              Master AI Through
-              <span className="mt-1 block bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                Interactive Learning
-              </span>
-            </h1>
-
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-gray-600">
-              Learn faster with guided modules, hands-on projects, and game-like challenges designed for
-              creators, students, and future AI builders.
-            </p>
-
-            <div className="mt-8 grid grid-cols-3 gap-4">
-              {stats.map((stat, index) => (
-                <div
-                  key={index}
-                  className="group cursor-pointer rounded-2xl border border-purple-100 bg-white/80 p-4 text-center shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+      <main className="relative z-10 w-full">
+        {/* HERO SECTION */}
+        <section className="max-w-7xl mx-auto px-6 pt-16 pb-24 md:pt-24 md:pb-32">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* LEFT */}
+            <div className={`space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-50 border border-purple-100/80 text-xs font-semibold text-purple-700 tracking-wide uppercase">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                </span>
+                The Standard for AI Education
+              </div>
+              <h1 className="text-5xl lg:text-[4rem] font-extrabold tracking-tight text-gray-900 leading-[1.1] sm:leading-[1.15]">
+                Learn AI by <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">Playing & Building</span>
+              </h1>
+              <p className="text-lg text-gray-600 max-w-lg leading-relaxed">
+                Master tough AI concepts with guided mini-games, adaptive quizzes, and real-world simulations. Build actual apps from day one.
+              </p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
+                <button
+                  onClick={() => document.getElementById('login-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="h-12 px-8 rounded-xl bg-gray-900 text-white font-semibold flex items-center justify-center gap-2 hover:bg-gray-800 hover:-translate-y-0.5 transition-all shadow-md active:scale-95"
                 >
-                  <div className="text-2xl font-bold text-gray-900 transition group-hover:text-purple-700">{stat.value}</div>
-                  <div className="mt-1 text-xs text-gray-600 sm:text-sm">{stat.label}</div>
-                </div>
-              ))}
+                  Start Learning Free <span className="text-lg">→</span>
+                </button>
+              </div>
             </div>
 
-            <div className="mt-10 space-y-3">
-              <h2 className="text-xl font-semibold text-gray-900">Why Bloom Works</h2>
-              {features.map((feature, index) => (
-                <article
-                  key={index}
-                  className={`group flex cursor-pointer items-start gap-4 rounded-2xl border bg-white/75 p-4 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md ${feature.cardClass}`}
-                >
-                  <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl text-2xl transition duration-300 group-hover:scale-110 ${feature.iconClass}`}>
-                    {feature.icon}
+            {/* RIGHT (Illustration/Mockup) */}
+            <div className={`relative w-full aspect-square md:aspect-[4/3] lg:aspect-square flex items-center justify-center transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/80 to-white/30 border border-white/60 shadow-2xl shadow-blue-900/5 backdrop-blur-3xl overflow-hidden flex flex-col transform md:rotate-2 hover:rotate-0 transition-transform duration-700 ease-out">
+                {/* Fake Header */}
+                <div className="h-12 border-b border-gray-100/50 bg-white/60 flex items-center px-4 gap-2 backdrop-blur-md">
+                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                </div>
+                {/* Fake Dashboard Content */}
+                <div className="p-6 flex-1 bg-gray-50/50 space-y-5">
+                  <div className="flex justify-between items-end">
+                    <div className="space-y-2">
+                       <div className="w-16 h-4 bg-gray-200 rounded-md"></div>
+                       <div className="w-32 h-6 bg-gray-300 rounded-md"></div>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-purple-100"></div>
                   </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="h-28 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col justify-between">
+                      <div className="w-12 h-4 bg-purple-100 rounded"></div>
+                      <div className="w-20 h-8 bg-purple-600 rounded"></div>
+                    </div>
+                    <div className="h-28 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col justify-between">
+                      <div className="w-12 h-4 bg-blue-100 rounded"></div>
+                      <div className="w-20 h-8 bg-blue-600 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="h-32 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-3 relative overflow-hidden">
+                    <div className="w-1/4 h-4 bg-gray-100 rounded mb-4"></div>
+                    <div className="w-full h-2.5 bg-gray-100 rounded-full">
+                       <div className="w-2/3 h-2.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+                    </div>
+                    <div className="w-full h-12 bg-gray-50 rounded-xl border border-gray-100 mt-4"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating badge */}
+              <div className="absolute -left-6 bottom-12 rounded-2xl bg-white p-4 shadow-xl shadow-purple-900/5 border border-gray-100/80 animate-bounce" style={{ animationDuration: '3.5s' }}>
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">🏆</div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 transition-colors duration-300 group-hover:text-purple-700">{feature.title}</h3>
-                    <p className="text-sm text-gray-600">{feature.desc}</p>
+                    <p className="text-[10px] font-bold tracking-wider uppercase text-gray-400">Unlocked</p>
+                    <p className="text-sm font-semibold text-gray-900">AI Architect</p>
                   </div>
-                </article>
-              ))}
-            </div>
-
-            <section className="mt-10 rounded-3xl border border-purple-100 bg-white/70 p-6 shadow-lg backdrop-blur-sm">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">Structured Learning Path</h3>
-                <span className="text-xs font-medium text-purple-600">Updated weekly</span>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {learningPath.map((item, index) => (
-                  <button
-                    type="button"
-                    key={item.title}
-                    onClick={() => setActivePathIndex(index)}
-                    className={`rounded-xl border p-4 text-left transition duration-300 ${
-                      activePathIndex === index
-                        ? "border-purple-300 bg-purple-50 shadow-sm"
-                        : "border-gray-200 bg-white hover:border-purple-200"
-                    }`}
-                  >
-                    <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                    <p className="text-xs text-gray-500">{item.time}</p>
-                    <span className="mt-2 inline-block rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-700">
-                      {item.level}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </section>
-          </section>
-
-          <aside
-            className={`transition-all duration-700 ease-out ${
-              isVisible ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
-            }`}
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="relative overflow-hidden rounded-3xl border border-purple-100 bg-white/95 p-7 shadow-2xl">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-purple-200/40 blur-2xl" />
-              <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-indigo-200/40 blur-2xl" />
-
-              <div className="relative mb-8 text-center">
-                <h2 className="mb-2 text-3xl font-bold text-gray-900">
-                  {isLogin ? "Welcome Back" : "Create Account"}
-                </h2>
-                <p className="text-gray-600">
-                  {isLogin ? "Sign in to continue your journey" : "Start your AI learning journey"}
-                </p>
-              </div>
-
-              <button
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-                className="group mb-6 flex w-full items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white py-4 font-semibold text-gray-900 transition-all duration-300 hover:border-purple-200 hover:bg-purple-50 disabled:opacity-50"
-              >
-                <svg className="h-6 w-6 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                Sign in with Google
-              </button>
-
-              <div className="mb-6 flex items-center gap-4">
-                <div className="h-px flex-1 bg-gray-200" />
-                <span className="text-sm font-medium text-gray-400">or continue with email</span>
-                <div className="h-px flex-1 bg-gray-200" />
-              </div>
-
-              <div className="space-y-4">
-                <div className="relative group">
-                  <input
-                    className="w-full rounded-xl border-2 border-gray-200 p-4 pr-4 text-gray-900 placeholder-gray-400 transition-all duration-300 group-hover:border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Email address"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={handleFormKeyDown}
-                  />
-                </div>
-
-                <div className="relative group">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className="w-full rounded-xl border-2 border-gray-200 p-4 pr-20 text-gray-900 placeholder-gray-400 transition-all duration-300 group-hover:border-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={handleFormKeyDown}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-medium text-purple-600 transition hover:bg-purple-50"
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </button>
                 </div>
               </div>
-
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="mt-6 w-full transform rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.01] hover:from-purple-700 hover:to-indigo-700 hover:shadow-xl active:scale-[0.98] disabled:opacity-50"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Processing...
-                  </span>
-                ) : isLogin ? (
-                  "Sign In"
-                ) : (
-                  "Create Account"
-                )}
-              </button>
-
-              <p
-                className="mt-6 cursor-pointer text-center font-medium text-purple-600 transition-colors duration-300 hover:text-purple-700"
-                onClick={() => setIsLogin(!isLogin)}
-              >
-                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-              </p>
-
-            </div>
-
-            <div className="mt-5 rounded-2xl border border-purple-100 bg-white/70 p-4 backdrop-blur-sm">
-              <p className="mb-3 text-center text-sm text-gray-500">Trusted by learners worldwide</p>
-              <div className="flex justify-center gap-6 text-gray-500">
-                <span className="cursor-pointer text-2xl transition-transform duration-300 hover:scale-110">🔒</span>
-                <span className="cursor-pointer text-2xl transition-transform duration-300 hover:scale-110">🛡️</span>
-                <span className="cursor-pointer text-2xl transition-transform duration-300 hover:scale-110">✅</span>
+              
+              {/* Floating avatar */}
+              <div className="absolute -right-4 top-16 rounded-full bg-white p-2 shadow-lg shadow-blue-900/5 border border-gray-100/80 animate-pulse" style={{ animationDuration: '4s' }}>
+                 <div className="w-12 h-12 rounded-full bg-[#EBF5FF] flex items-center justify-center text-xl">🤖</div>
               </div>
-            </div>
-          </aside>
-        </div>
-      </main>
-
-      <footer className="mt-10 border-t border-gray-200 bg-white/90">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-            <div>
-              <div className="mb-4 flex items-center gap-3">
-                <AnimatedLogo size={32} />
-                <span className="text-gray-900 font-bold text-xl">Bloom</span>
-              </div>
-              <p className="text-sm text-gray-600">
-                Bloom helps you learn AI through interactive experiences, guided projects, and community support.
-              </p>
-            </div>
-            <div>
-              <h4 className="mb-3 font-semibold text-gray-900">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Features</li>
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Learning Paths</li>
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Roadmap</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-3 font-semibold text-gray-900">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="cursor-pointer transition-colors hover:text-purple-600">About</li>
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Community</li>
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Careers</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-3 font-semibold text-gray-900">Legal</h4>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Privacy</li>
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Terms</li>
-                <li className="cursor-pointer transition-colors hover:text-purple-600">Security</li>
-              </ul>
             </div>
           </div>
-          <div className="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-500">
-            © 2026 Bloom. Learn deeply. Build boldly.
+        </section>
+
+        {/* FEATURES SECTION */}
+        <section className="bg-white py-24 mb-12 border-y border-gray-100/80 relative">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">Why Bloom works better</h2>
+              <p className="text-lg text-gray-500 leading-relaxed">Traditional learning is boring. We combine game design with world-class curriculum to make AI concepts stick.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { title: "Interactive Learning", icon: "🎮", desc: "No more long videos. Learn by interacting with models directly." },
+                { title: "AI Mentor", icon: "🧠", desc: "Get stuck? Your personalized mentor helps you understand the 'why'." },
+                { title: "Gamified Experience", icon: "🏆", desc: "Earn XP, unlock badges, and build streaks to stay motivated." },
+                { title: "Real-world Simulations", icon: "🚀", desc: "Deploy real AI agents and see them act in local environments." }
+              ].map((f, i) => (
+                <div key={i} className="group p-6 rounded-[2rem] border border-gray-200/50 bg-gray-50/40 hover:bg-white hover:border-gray-200 hover:shadow-xl shadow-gray-200/20 hover:-translate-y-1 transition-all duration-300">
+                  <div className="w-14 h-14 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    {f.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
+                  <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* LOGIN / SIGNUP SECTION */}
+        <section id="login-section" className="py-16 md:py-24 max-w-md md:max-w-lg mx-auto px-6">
+          <div className="rounded-[2rem] border border-gray-200/60 bg-white/80 p-8 md:p-12 shadow-2xl shadow-purple-900/5 backdrop-blur-xl relative overflow-hidden">
+            <div className="absolute top-0 w-full h-1.5 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 left-0"></div>
+
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold text-gray-900 tracking-tight">{isLogin ? "Welcome Back" : "Start Your Journey"}</h2>
+              <p className="text-gray-500 mt-2">{isLogin ? "Sign in to continue learning" : "Create an account to access free modules"}</p>
+            </div>
+
+            <button
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 h-12 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              </svg>
+              Continue with Google
+            </button>
+
+            <div className="flex items-center gap-4 my-8">
+              <div className="h-px bg-gray-200 flex-1"></div>
+              <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Or email</span>
+              <div className="h-px bg-gray-200 flex-1"></div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Email address</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={handleFormKeyDown} className="w-full h-12 rounded-xl border border-gray-300 bg-white px-4 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all shadow-sm" placeholder="you@domain.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">Password</label>
+                <div className="relative">
+                  <input type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} onKeyDown={handleFormKeyDown} className="w-full h-12 rounded-xl border border-gray-300 bg-white pl-4 pr-16 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all shadow-sm" placeholder="••••••••" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-semibold text-gray-500 hover:text-gray-900 transition bg-white px-1">
+                    {showPassword ? "HIDE" : "SHOW"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="mt-8 w-full h-12 rounded-xl bg-gray-900 text-white font-semibold flex items-center justify-center hover:bg-gray-800 transition-all shadow-md active:scale-[0.98] disabled:opacity-50"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Processing...
+                </span>
+              ) : isLogin ? "Sign In" : "Create Account"}
+            </button>
+
+            <div className="mt-8 text-center">
+              <button onClick={() => setIsLogin(!isLogin)} className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200/80 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+          <div className="col-span-1 sm:col-span-2">
+            <div className="flex items-center gap-2.5 mb-4">
+              <AnimatedLogo size={28} />
+              <span className="font-bold text-lg text-gray-900">Bloom</span>
+            </div>
+            <p className="text-sm text-gray-500 max-w-sm leading-relaxed">The new standard for interactive AI education. Built for builders, dreamers, and future tech leaders.</p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-4">Product</h4>
+            <ul className="space-y-3 text-sm text-gray-500">
+              <li><button className="hover:text-gray-900 transition">Features</button></li>
+              <li><button className="hover:text-gray-900 transition">Learning Paths</button></li>
+              <li><button className="hover:text-gray-900 transition">Pricing</button></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-4">Company</h4>
+            <ul className="space-y-3 text-sm text-gray-500">
+              <li><button className="hover:text-gray-900 transition">About</button></li>
+              <li><button className="hover:text-gray-900 transition">Community</button></li>
+              <li><button className="hover:text-gray-900 transition">Legal & Privacy</button></li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 mt-12 md:mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between text-sm text-gray-400 gap-4">
+          <p>© 2026 Bloom Platforms Inc. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+             <span className="cursor-pointer hover:text-gray-900 transition">Twitter</span>
+             <span className="cursor-pointer hover:text-gray-900 transition">GitHub</span>
+             <span className="cursor-pointer hover:text-gray-900 transition">Discord</span>
           </div>
         </div>
       </footer>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Card from "@/components/Card";
@@ -16,7 +16,7 @@ interface AIQuestion {
   correct: number;
 }
 
-export default function Quiz() {
+function QuizContent() {
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<"difficulty" | "topic">("difficulty");
   const [difficulty, setDifficulty] = useState<Difficulty>("beginner");
@@ -402,5 +402,13 @@ export default function Quiz() {
         )}
       </div>
     </>
+  );
+}
+
+export default function Quiz() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading quiz data...</div>}>
+      <QuizContent />
+    </Suspense>
   );
 }

@@ -54,7 +54,7 @@ export async function recordProgress(update: ProgressUpdate) {
       level: getLevel(nextXP),
       streak,
       badges: getBadgeSet(nextXP, streak),
-      modulesCompleted: [...modulesCompleted],
+      modulesCompleted: Array.from(modulesCompleted),
       quizScores,
       gameStats,
       updatedAt: new Date(),

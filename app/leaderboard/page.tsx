@@ -20,7 +20,7 @@ export default function Leaderboard() {
     const fetchUsers = async () => {
       try {
         const snap = await getDocs(collection(db, "users"));
-        const data = snap.docs.map((docItem) => ({ id: docItem.id, ...docItem.data() }));
+        const data = snap.docs.map((docItem) => ({ id: docItem.id, ...docItem.data() })) as any[];
         data.sort((a, b) => (b.xp || 0) - (a.xp || 0));
         setUsers(data.slice(0, 20));
       } finally {

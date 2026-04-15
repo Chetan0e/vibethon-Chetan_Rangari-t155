@@ -35,7 +35,7 @@ export default function AIAssistant() {
           "X-Title": "Bloom AI",
         },
         body: JSON.stringify({
-          model: "google/gemma-2-9b-it:free",
+          model: "meta-llama/llama-3.2-3b-instruct:free",
           messages: [
             {
               role: "system",
