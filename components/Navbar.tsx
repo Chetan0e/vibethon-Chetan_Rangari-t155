@@ -8,6 +8,15 @@ import AnimatedLogo from "@/components/AnimatedLogo";
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const links = [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/module", label: "Modules" },
+    { href: "/playground", label: "Playground" },
+    { href: "/game", label: "Games" },
+    { href: "/quiz", label: "Quiz" },
+    { href: "/simulation", label: "Simulation" },
+    { href: "/leaderboard", label: "Leaderboard" },
+  ];
 
   const handleLogout = async () => {
     await logout();
@@ -18,30 +27,28 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm">
       <div className="flex justify-between items-center p-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
-          <AnimatedLogo size={40} />
-          <h1 className="font-bold text-2xl gradient-text">Bloom</h1>
+          <div className="rounded-xl bg-white p-1 shadow-sm ring-1 ring-purple-100">
+            <AnimatedLogo size={34} />
+          </div>
+          <h1 className="bg-gradient-to-r from-gray-900 to-purple-700 bg-clip-text text-2xl font-extrabold text-transparent">
+            Bloom
+          </h1>
         </div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex gap-6 items-center">
-          <a href="/dashboard" className="text-gray-600 hover:text-purple-500 transition font-medium">
-            Dashboard
-          </a>
-          <a href="/roadmap" className="text-gray-600 hover:text-purple-500 transition font-medium">
-            Roadmap
-          </a>
-          <a href="/leaderboard" className="text-gray-600 hover:text-purple-500 transition font-medium">
-            Leaderboard
-          </a>
+        <div className="hidden items-center gap-4 md:flex">
+          {links.map((link) => (
+            <a key={link.href} href={link.href} className="text-sm font-medium text-gray-600 transition hover:text-purple-600">
+              {link.label}
+            </a>
+          ))}
           <button
             onClick={handleLogout}
-            className="bg-gradient-to-r from-red-400 to-red-500 hover:from-red-500 hover:to-red-600 text-white px-5 py-2 rounded-lg transition font-medium shadow-md hover:shadow-lg"
+            className="rounded-lg bg-gradient-to-r from-red-400 to-red-500 px-4 py-2 text-sm font-medium text-white shadow-md transition hover:from-red-500 hover:to-red-600 hover:shadow-lg"
           >
             Logout
           </button>
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -64,39 +71,25 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div
-          className="md:hidden bg-white/95 backdrop-blur-md border-t transition-all duration-300"
-        >
+        <div className="border-t bg-white/95 backdrop-blur-md transition-all duration-300 md:hidden">
           <div className="flex flex-col p-4 gap-3">
-            <a
-              href="/dashboard"
-              className="text-gray-600 hover:text-purple-500 transition font-medium py-2 px-4 rounded-lg hover:bg-purple-50"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Dashboard
-            </a>
-            <a
-              href="/roadmap"
-              className="text-gray-600 hover:text-purple-500 transition font-medium py-2 px-4 rounded-lg hover:bg-purple-50"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Roadmap
-            </a>
-            <a
-              href="/leaderboard"
-              className="text-gray-600 hover:text-purple-500 transition font-medium py-2 px-4 rounded-lg hover:bg-purple-50"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Leaderboard
-            </a>
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="rounded-lg px-4 py-2 font-medium text-gray-600 transition hover:bg-purple-50 hover:text-purple-500"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
             <button
               onClick={() => {
                 handleLogout();
                 setMobileMenuOpen(false);
               }}
-              className="bg-gradient-to-r from-red-400 to-red-500 hover:from-red-500 hover:to-red-600 text-white px-5 py-3 rounded-lg transition font-medium shadow-md mt-2"
+              className="mt-2 rounded-lg bg-gradient-to-r from-red-400 to-red-500 px-5 py-3 font-medium text-white shadow-md transition hover:from-red-500 hover:to-red-600"
             >
               Logout
             </button>

@@ -23,6 +23,11 @@ export const register = async (email: string, password: string) => {
     xp: 0,
     progress: 0,
     level: "Seed",
+    streak: 1,
+    badges: ["Beginner"],
+    modulesCompleted: [],
+    quizScores: {},
+    gameStats: {},
     createdAt: new Date(),
   });
   
@@ -42,6 +47,11 @@ export const signInWithGoogle = async () => {
       xp: 0,
       progress: 0,
       level: "Seed",
+      streak: 1,
+      badges: ["Beginner"],
+      modulesCompleted: [],
+      quizScores: {},
+      gameStats: {},
       createdAt: new Date(),
     });
   }
