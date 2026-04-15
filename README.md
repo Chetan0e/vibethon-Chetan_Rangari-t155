@@ -64,19 +64,6 @@
    ```
    Open `http://localhost:3000` to start exploring.
 
-## ☁️ Deployment (Firebase Hosting)
-
-This project fully supports Next.js Server-Side Rendering (SSR) via Firebase Web Frameworks.
-
-1. Ensure your Firebase project is upgraded to the **Blaze Plan** (required for Cloud Functions that serve dynamic Next.js routes).
-2. Enable Firebase frameworks in the CLI:
-   ```bash
-   npx firebase-tools experiments:enable webframeworks
-   ```
-3. Deploy everything directly:
-   ```bash
-   npx firebase-tools deploy
-   ```
 
 ## 🔐 Database Security
 
