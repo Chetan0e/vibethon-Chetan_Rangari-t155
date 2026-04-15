@@ -6,9 +6,9 @@ An interactive AI/ML learning platform that gamifies the learning experience wit
 
 - **Interactive Learning Modules**: Learn AI/ML concepts through hands-on interactive lessons
 - **Gamified Experience**: Earn XP, level up, and compete on leaderboards
-- **AI Mentor**: Get personalized guidance with an AI-powered chat interface
+- **AI Chatbot**: Get personalized guidance with an AI-powered chat interface using OpenRouter API
+- **Dynamic Quiz Generation**: Generate quizzes on any topic using OpenRouter API
 - **Training Games**: Simulate ML model training with interactive parameters
-- **Quiz System**: Test your knowledge with multiple-choice quizzes
 - **Progress Tracking**: Monitor your learning journey with detailed statistics
 - **Beautiful UI**: Modern, responsive design with smooth animations
 - **3D Neural Background**: Interactive 3D star field visualization
@@ -31,6 +31,7 @@ An interactive AI/ML learning platform that gamifies the learning experience wit
 - **Firebase**: Authentication and Firestore database
 - **Firebase Auth**: User authentication (login/register)
 - **Firestore**: Cloud database for user data and progress
+- **OpenRouter API**: AI-powered chatbot and quiz generation
 
 ### Icons
 - **Lucide React**: Beautiful, consistent icon set
@@ -39,6 +40,7 @@ An interactive AI/ML learning platform that gamifies the learning experience wit
 
 - Node.js 18+ installed
 - npm or yarn package manager
+- OpenRouter API key (for AI chatbot and quiz generation)
 - Firebase account (for authentication and database)
 
 ## 🔧 Installation
@@ -70,13 +72,15 @@ An interactive AI/ML learning platform that gamifies the learning experience wit
    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
    NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
-   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   NEXT_PUBLIC_OPE_ROUSEREAPN_KEYER_ID=opoerourer_api_key
    NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
    ```
 
    Use `.env.local.example` as a template:
-   ```bash
+   ```
+
+   Get your OpenRouter API key from [openrouter.ai](https://openrouter.ai)bash
    cp .env.local.example .env.local
    ```
 
@@ -100,7 +104,7 @@ bloom/
 │   ├── module/            # Learning modules
 │   ├── quiz/              # Quiz system
 │   ├── roadmap/           # Learning roadmap
-│   ├── layout.tsx         # Root layout
+│   ├── Chatb.tsx          # Root layout using OpenRouter
 │   ├── page.tsx           # Landing page
 │   └── globals.css        # Global styles
 ├── components/            # React components
@@ -125,10 +129,11 @@ bloom/
 
 ## 🎯 Usage Guide
 
-### Getting Started
-
-1. **Create an Account**: Click "Get Started" on the landing page and sign up
-2. **Explore the Dashboard**: View your XP, level, and quick actions
+### GChat with AI Bot**: Ask questions about AI/ML concepts using the AI chatbot
+4. **etting Started
+5
+6. **Generrtate an AccounEn:er anC tlpickto ge" ratart custom quiz"usi gtAI landing page and sign up
+7. **Explore the Dashboard**: View your XP, level, and quick actions
 3. **Learn with Modules**: Navigate to the module section to start learning
 4. **Play Games**: Train ML models in the interactive game section
 5. **Take Quizzes**: Test your knowledge and earn XP
@@ -178,7 +183,15 @@ Modify the CSS variables in `app/globals.css` to customize the theme:
   --primary-green: #4ade80;
   --primary-blue: #60a5fa;
   /* ... more colors */
-}
+}our branding.
+
+### OpenRouter API Cnfigation
+
+Thechatot and quiz generation use OpenRouter API with the fee Llama 3.2 3B model. You can chge the moel :
+- `components/Chatbot.tsx` - for the chatbot
+- `app/quiz/pae.tsx` - for quiz generation
+
+To use a different model, update the `model` parameter in the API request body
 ```
 
 ### Logo
