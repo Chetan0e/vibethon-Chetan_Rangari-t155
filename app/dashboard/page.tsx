@@ -50,22 +50,15 @@ export default function Dashboard() {
       <Navbar />
 
       <div className="p-6 md:p-10 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <div className="animate-fade-in">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
             Welcome to Bloom 🌸
           </h1>
           <p className="text-gray-600">Your AI learning journey continues</p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 }}
-          >
+          <div className="animate-fade-in">
             <Card className="neon-glow-green">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg">Your Progress</h3>
@@ -77,13 +70,9 @@ export default function Dashboard() {
               <p className="text-sm text-gray-600 mt-1">Level: {userData?.level || "Seed"}</p>
               <ProgressBar value={userData?.progress || 0} />
             </Card>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
             <Card>
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg">Quick Actions</h3>
@@ -110,13 +99,9 @@ export default function Dashboard() {
                 </a>
               </div>
             </Card>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-          >
+          <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <Card>
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-lg">Daily Streak</h3>
@@ -125,24 +110,14 @@ export default function Dashboard() {
               <p className="text-4xl font-bold text-orange-500">3 Days</p>
               <p className="text-sm text-gray-600 mt-2">Keep it up!</p>
             </Card>
-          </motion.div>
+          </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mt-8"
-        >
+        <div className="mt-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <AIMentor />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
-        >
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in" style={{ animationDelay: '0.5s' }}>
           <a href="/roadmap" className="glass-card p-6 text-center card-hover cursor-pointer">
             <div className="text-4xl mb-3">🗺️</div>
             <h3 className="font-semibold">Roadmap</h3>
@@ -166,7 +141,7 @@ export default function Dashboard() {
             <h3 className="font-semibold">Games</h3>
             <p className="text-sm text-gray-600 mt-1">Learn by playing</p>
           </a>
-        </motion.div>
+        </div>
       </div>
     </>
   );
