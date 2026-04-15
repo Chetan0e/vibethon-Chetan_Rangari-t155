@@ -8,9 +8,10 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Card from "@/components/Card";
 import AIAssistant from "@/components/AIAssistant";
+import AnimatedLogo from "@/components/AnimatedLogo";
 import { auth, db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import { learningModules } from "@/lib/learningData";
+import { modulesByLevel } from "@/lib/modulePathwayData";
 import { User } from "@/types";
 
 const levelRanges: Record<User["level"], { min: number; max: number; next: User["level"] | "Peak" }> = {
@@ -18,6 +19,12 @@ const levelRanges: Record<User["level"], { min: number; max: number; next: User[
   Sprout: { min: 600, max: 1500, next: "Bloom" },
   Bloom: { min: 1500, max: 2200, next: "Peak" },
 };
+
+const allPathwayModuleIds = new Set(
+  Object.values(modulesByLevel)
+    .flat()
+    .map((module) => module.id),
+);
 
 export default function Dashboard() {
   const [userData, setUserData] = useState<Partial<User> | null>(null);
@@ -31,7 +38,20 @@ export default function Dashboard() {
         return;
       }
       const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) setUserData(snap.data());
+      if (snap.exists()) {
+        const data = snap.data();
+        setUserData(data);
+      } else {
+        setUserData({
+          xp: 0,
+          level: "Seed",
+          streak: 0,
+          modulesCompleted: [],
+          quizScores: {},
+          gameStats: {},
+          badges: ["Beginner"],
+        });
+      }
       setLoading(false);
     });
 
@@ -39,8 +59,11 @@ export default function Dashboard() {
   }, [router]);
 
   const moduleCompletion = useMemo(() => {
-    const done = (userData?.modulesCompleted || []).length;
-    return Math.round((done / learningModules.length) * 100);
+    const completed = userData?.modulesCompleted || [];
+    const normalizedCompleted = new Set(completed.filter((moduleId) => allPathwayModuleIds.has(moduleId)));
+
+    if (!allPathwayModuleIds.size) return 0;
+    return Math.round((normalizedCompleted.size / allPathwayModuleIds.size) * 100);
   }, [userData]);
 
   const quizAvg = useMemo(() => {
@@ -53,17 +76,21 @@ export default function Dashboard() {
     const level = userData?.level || "Seed";
     const xp = Number(userData?.xp || 0);
     const range = levelRanges[level];
-    const modulesCompleted = (userData?.modulesCompleted || []).length;
+    const modulesCompletedSet = new Set(
+      (userData?.modulesCompleted || []).filter((moduleId) => allPathwayModuleIds.has(moduleId)),
+    );
+    const modulesCompleted = modulesCompletedSet.size;
     const quizScores = Object.values(userData?.quizScores || {}) as number[];
     const gameScores = Object.values(userData?.gameStats || {}) as number[];
 
     const levelProgress = Math.min(100, Math.max(0, Math.round(((xp - range.min) / (range.max - range.min)) * 100)));
     const xpToNext = Math.max(0, range.max - xp);
-    const modulesRemaining = Math.max(0, learningModules.length - modulesCompleted);
+    const totalModules = allPathwayModuleIds.size;
+    const modulesRemaining = Math.max(0, totalModules - modulesCompleted);
     const quizAttempts = quizScores.length;
     const gamesPlayed = gameScores.length;
     const gameAvg = gameScores.length ? Math.round(gameScores.reduce((sum, score) => sum + score, 0) / gameScores.length) : 0;
-    const activeDays = Math.min(7, Math.max(1, Number(userData?.streak || 1)));
+    const activeDays = Math.min(7, Math.max(0, Number(userData?.streak || 0)));
     const consistency = Math.round((activeDays / 7) * 100);
     const engagementScore = Math.round((moduleCompletion * 0.4) + (quizAvg * 0.35) + (Math.min(100, gameAvg) * 0.25));
 
@@ -81,6 +108,7 @@ export default function Dashboard() {
       nextLevel: range.next,
       levelProgress,
       modulesCompleted,
+      totalModules,
       modulesRemaining,
       quizAttempts,
       gamesPlayed,
@@ -115,12 +143,17 @@ export default function Dashboard() {
       <div className="mx-auto max-w-7xl space-y-6 p-6 md:p-10">
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border border-white/60 bg-white/80 p-6 shadow-xl shadow-purple-100/60 backdrop-blur-xl md:p-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-purple-500">Performance Overview</p>
-              <h1 className="mt-2 text-3xl font-bold text-gray-900 md:text-4xl">Learning Dashboard</h1>
-              <p className="mt-2 max-w-2xl text-sm text-gray-600 md:text-base">
-                Monitor learning outcomes, track growth signals, and follow focused next steps to level up faster.
-              </p>
+            <div className="flex items-center gap-4">
+              <div className="rounded-2xl bg-white p-3 shadow-lg ring-1 ring-purple-100">
+                <AnimatedLogo size={50} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-purple-500">Performance Overview</p>
+                <h1 className="mt-2 text-3xl font-bold text-gray-900 md:text-4xl">Learning Dashboard</h1>
+                <p className="mt-2 max-w-2xl text-sm text-gray-600 md:text-base">
+                  Monitor learning outcomes, track growth signals, and follow focused next steps to level up faster.
+                </p>
+              </div>
             </div>
             <div className="grid w-full gap-3 sm:grid-cols-2 lg:w-auto">
               <Link href="/module" className="rounded-xl bg-purple-600 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-purple-300 transition hover:bg-purple-700">
@@ -142,7 +175,9 @@ export default function Dashboard() {
           <Card className="border border-indigo-100/80 bg-gradient-to-br from-white to-indigo-50/70">
             <p className="text-sm text-gray-500">Module Completion</p>
             <p className="mt-2 text-3xl font-bold text-indigo-700">{moduleCompletion}%</p>
-            <p className="mt-2 text-xs text-gray-500">{insights.modulesCompleted}/{learningModules.length} modules completed</p>
+            <p className="mt-2 text-xs text-gray-500">
+              {insights.modulesCompleted}/{insights.totalModules} modules completed
+            </p>
           </Card>
           <Card className="border border-emerald-100/80 bg-gradient-to-br from-white to-emerald-50/80">
             <p className="text-sm text-gray-500">Learning Consistency</p>
@@ -151,7 +186,7 @@ export default function Dashboard() {
           </Card>
           <Card className="border border-amber-100/80 bg-gradient-to-br from-white to-amber-50/80">
             <p className="text-sm text-gray-500">Current Streak</p>
-            <p className="mt-2 text-3xl font-bold text-amber-600">{userData?.streak || 1} days</p>
+            <p className="mt-2 text-3xl font-bold text-amber-600">{userData?.streak || 0} days</p>
             <p className="mt-2 text-xs text-gray-500">Engagement score: {insights.engagementScore}%</p>
           </Card>
         </div>

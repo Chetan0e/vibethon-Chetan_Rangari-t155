@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Card from "@/components/Card";
 import { quizQuestions } from "@/lib/learningData";
 import { Difficulty } from "@/types";
 import { recordProgress } from "@/lib/progress";
+import { useSearchParams } from "next/navigation";
 
 interface AIQuestion {
   id: number;
@@ -16,6 +17,7 @@ interface AIQuestion {
 }
 
 export default function Quiz() {
+  const searchParams = useSearchParams();
   const [mode, setMode] = useState<"difficulty" | "topic">("difficulty");
   const [difficulty, setDifficulty] = useState<Difficulty>("beginner");
   const [topic, setTopic] = useState("");
@@ -27,19 +29,98 @@ export default function Quiz() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const [feedback, setFeedback] = useState("");
+  const [topicBootstrapped, setTopicBootstrapped] = useState(false);
   const questions = useMemo(() => quizQuestions.filter((item) => item.difficulty === difficulty), [difficulty]);
+
+  const buildFallbackQuestions = useCallback((topicName: string): AIQuestion[] => {
+    const cleanTopic = topicName.trim() || "AI and ML";
+    return [
+      {
+        id: 1,
+        question: `Which statement best describes ${cleanTopic}?`,
+        options: [
+          `${cleanTopic} is only a frontend UI concept`,
+          `${cleanTopic} combines core concepts with practical model/application behavior`,
+          `${cleanTopic} is unrelated to data`,
+          `${cleanTopic} can only be learned through math proofs`,
+        ],
+        correct: 1,
+      },
+      {
+        id: 2,
+        question: `When learning ${cleanTopic}, what should you focus on first?`,
+        options: [
+          "Perfect optimization from day one",
+          "Memorizing every formula without context",
+          "Understanding the problem, data flow, and expected outcome",
+          "Skipping evaluation entirely",
+        ],
+        correct: 2,
+      },
+      {
+        id: 3,
+        question: `A strong project habit in ${cleanTopic} is to:`,
+        options: [
+          "Avoid experiments and iteration",
+          "Use random metrics",
+          "Track progress with clear metrics and test assumptions",
+          "Deploy without validation",
+        ],
+        correct: 2,
+      },
+      {
+        id: 4,
+        question: `Why do real-world teams evaluate ${cleanTopic} solutions continuously?`,
+        options: [
+          "To reduce reliability and trust",
+          "To catch drift, regressions, and changing user behavior",
+          "Because testing is optional",
+          "To make systems slower",
+        ],
+        correct: 1,
+      },
+      {
+        id: 5,
+        question: `What is the best next step after finishing a ${cleanTopic} lesson?`,
+        options: [
+          "Build a mini use case and validate understanding with a quiz",
+          "Never practice",
+          "Ignore implementation details",
+          "Skip all feedback loops",
+        ],
+        correct: 0,
+      },
+    ];
+  }, []);
+
+  const parseQuestionsFromModel = (rawContent: string): AIQuestion[] => {
+    const normalized = rawContent.replace(/```json|```/gi, "").trim();
+    const parsed = JSON.parse(normalized);
+    if (!Array.isArray(parsed)) throw new Error("Invalid quiz format from model.");
+
+    return parsed
+      .map((item, index) => ({
+        id: Number(item.id ?? index + 1),
+        question: String(item.question ?? ""),
+        options: Array.isArray(item.options) ? item.options.map((option: unknown) => String(option)) : [],
+        correct: Number(item.correct),
+      }))
+      .filter((item) => item.question && item.options.length === 4 && item.correct >= 0 && item.correct < 4);
+  };
 
   const handleAnswer = async (index: number) => {
     if (answered) return;
 
     const currentQuestions = mode === "topic" ? aiQuestions : questions;
-    const current = currentQuestions[currentQuestion];
+    const current = currentQuestions[currentQuestion] as any;
     const correct = index === current.correct;
+    const isLastQuestion = currentQuestion === currentQuestions.length - 1;
+    const nextScore = correct ? score + 1 : score;
     setSelectedAnswer(index);
     setAnswered(true);
     
     if (mode === "difficulty") {
-      const quizQuestion = current as any;
+      const quizQuestion = current;
       setFeedback(correct ? `Correct! +${quizQuestion.xp} XP` : quizQuestion.explanation);
       if (correct) {
         setScore((prev) => prev + 1);
@@ -55,8 +136,15 @@ export default function Quiz() {
       }
     }
 
+    if (isLastQuestion) {
+      const totalQuestions = currentQuestions.length || 1;
+      const percentageScore = Math.round((nextScore / totalQuestions) * 100);
+      const scoreRef = mode === "topic" ? `topic-${topic}` : `${difficulty}-quiz`;
+      await recordProgress({ type: "quiz", refId: scoreRef, xp: 0, score: percentageScore });
+    }
+
     setTimeout(() => {
-      if (currentQuestion < currentQuestions.length - 1) {
+      if (!isLastQuestion) {
         setCurrentQuestion((prev) => prev + 1);
         setSelectedAnswer(null);
         setAnswered(false);
@@ -85,18 +173,22 @@ export default function Quiz() {
     resetQuiz();
   };
 
-  const generateAIQuiz = async () => {
-    if (!topic.trim()) return;
+  const generateAIQuiz = useCallback(async (forcedTopic?: string) => {
+    const topicToUse = (forcedTopic ?? topic).trim();
+    if (!topicToUse) return;
 
     setLoading(true);
+    setTopic(topicToUse);
     try {
-      console.log("Generating quiz for topic:", topic);
-      console.log("API Key available:", !!process.env.NEXT_PUBLIC_OPENROUTER_API_KEY);
-      
+      const apiKey = process.env.NEXT_PUBLIC_OPENROUTER_API_KEY;
+      if (!apiKey) {
+        throw new Error("Missing OpenRouter API key.");
+      }
+
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${process.env.NEXT_PUBLIC_OPENROUTER_API_KEY}`,
+          Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -108,29 +200,24 @@ export default function Quiz() {
             },
             {
               role: "user",
-              content: `Generate 5 multiple-choice questions about ${topic}`,
+              content: `Generate 5 multiple-choice questions about ${topicToUse}`,
             },
           ],
         }),
       });
 
-      console.log("Response status:", response.status);
-      
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("API Error:", errorText);
-        throw new Error(`API request failed with status ${response.status}: ${errorText}`);
+        throw new Error(`API request failed with status ${response.status}.`);
       }
 
       const data = await response.json();
-      console.log("API Response:", data);
-      
       const content = data.choices[0]?.message?.content || "[]";
-      console.log("Content:", content);
-      
-      const parsedQuestions: AIQuestion[] = JSON.parse(content);
-      console.log("Parsed questions:", parsedQuestions);
-      
+      const parsedQuestions = parseQuestionsFromModel(content);
+
+      if (parsedQuestions.length < 3) {
+        throw new Error("Model returned too few valid questions.");
+      }
+
       setAiQuestions(parsedQuestions);
       setCurrentQuestion(0);
       setScore(0);
@@ -139,12 +226,38 @@ export default function Quiz() {
       setAnswered(false);
       setFeedback("");
     } catch (error) {
-      console.error("Error generating quiz:", error);
-      alert(`Failed to generate quiz: ${error instanceof Error ? error.message : 'Unknown error'}. Check console for details.`);
+      const fallbackQuestions = buildFallbackQuestions(topicToUse);
+      setAiQuestions(fallbackQuestions);
+      setCurrentQuestion(0);
+      setScore(0);
+      setShowResult(false);
+      setSelectedAnswer(null);
+      setAnswered(false);
+      setFeedback("");
     } finally {
       setLoading(false);
     }
-  };
+  }, [buildFallbackQuestions, topic]);
+
+  useEffect(() => {
+    if (topicBootstrapped) return;
+
+    const modeParam = searchParams.get("mode");
+    const topicParam = searchParams.get("topic");
+    const autoStart = searchParams.get("autostart") === "1";
+
+    if (modeParam === "topic") {
+      setMode("topic");
+      if (topicParam) {
+        setTopic(topicParam);
+        if (autoStart) {
+          void generateAIQuiz(topicParam);
+        }
+      }
+    }
+
+    setTopicBootstrapped(true);
+  }, [generateAIQuiz, searchParams, topicBootstrapped]);
 
   const finalXP = score * (difficulty === "beginner" ? 10 : difficulty === "intermediate" ? 15 : 20);
 
@@ -201,10 +314,10 @@ export default function Quiz() {
                 placeholder="e.g., Neural Networks, Machine Learning, Deep Learning..."
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && generateAIQuiz()}
+                onKeyDown={(e) => e.key === "Enter" && void generateAIQuiz()}
               />
               <button
-                onClick={generateAIQuiz}
+                onClick={() => void generateAIQuiz()}
                 disabled={loading}
                 className="btn-primary w-full rounded-lg px-4 py-3 font-semibold"
               >

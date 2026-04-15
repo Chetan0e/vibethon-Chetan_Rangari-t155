@@ -45,16 +45,31 @@ export default function PlaygroundPage() {
 
   const runCode = async () => {
     setRunning(true);
-    setOutput("Executing Python simulation...");
-    setTimeout(async () => {
-      const lines = code
-        .split("\n")
-        .filter((line) => line.trim() && !line.trim().startsWith("#"))
-        .slice(0, 7);
-      setOutput(`$ python main.py\n${lines.join("\n")}\n\nExecution complete. (Simulated runtime)`);
+    setOutput("Executing Python code...");
+    try {
+      const response = await fetch("/api/playground/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setOutput(`Execution failed:\n${data.error || "Unknown error"}`);
+        return;
+      }
+
+      const stdout = data.stdout ? `${data.stdout}\n` : "";
+      const stderr = data.stderr ? `\n[stderr]\n${data.stderr}\n` : "";
+      const timeoutNotice = data.timedOut ? "\nExecution timed out (10s limit).\n" : "";
+      setOutput(`$ ${data.command}\n${stdout}${stderr}${timeoutNotice}\nExit code: ${data.exitCode}`);
       setRunning(false);
       await recordProgress({ type: "playground", refId: template, xp: 18 });
-    }, 900);
+    } catch (error) {
+      setOutput(`Execution failed:\n${error instanceof Error ? error.message : "Unknown error"}`);
+    } finally {
+      setRunning(false);
+    }
   };
 
   const changeTemplate = (next: keyof typeof scripts) => {
@@ -69,7 +84,7 @@ export default function PlaygroundPage() {
       <div className="mx-auto max-w-7xl p-6 md:p-10">
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="mb-2 text-3xl font-bold md:text-4xl">Interactive Python Playground</h1>
-          <p className="text-gray-600">Edit ML scripts, run simulated execution, and learn by experimentation.</p>
+          <p className="text-gray-600">Edit ML scripts, run real Python execution, and learn by experimentation.</p>
         </motion.div>
 
         <div className="mt-6 flex gap-3">
